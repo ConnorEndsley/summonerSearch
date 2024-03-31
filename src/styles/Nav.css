@@ -27,4 +27,5 @@
 
 .navItem:hover{
     background-color: rgb(103, 141, 243);
+    cursor: pointer;
 }
