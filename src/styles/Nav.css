@@ -1,0 +1,30 @@
+.navContainer{
+    margin: 0;
+    margin-bottom: 50px;
+    display: flex;
+    justify-content: center;
+    height: 100px;
+    width: 100%;
+    background-color: #4171D6;
+}
+
+.navList{
+    list-style: none;
+    margin: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.navItem{
+    width: 100px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+    border: 2px solid black;
+    border-radius: 5px 5% 5px 5px;
+}
+
+.navItem:hover{
+    background-color: rgb(103, 141, 243);
+}
