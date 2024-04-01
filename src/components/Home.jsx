@@ -13,7 +13,7 @@ const Home = () => {
         Search for any summoner for League of Legends
     </h3>
     <>
-    <input type="text" />
+    <input type="text" placeholder="Enter Summoner Name"/>
     <button>Summoner</button>
     </>
 </>
