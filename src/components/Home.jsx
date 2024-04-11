@@ -5,7 +5,9 @@ import axios from 'axios';
 
 const Home = () => {
   const [searchText, setSearchText] = useState("");
-  const [summonerData, setSummonerData, playerData, setPlayerData] = useState({});
+  const [puuid, setPuuid] = useState('')
+  const [summonerId, setSummonerId] = useState('')
+  const [playerData, setPlayerData] = useState(null);
   const api_key = "RGAPI-79d88b4a-b61a-4669-849e-7645cd486c6c";
 
   const handleChange = (event) => {
@@ -19,8 +21,14 @@ const Home = () => {
 
     // use axios to handle API call
     axios.get(url)
-    .then(function(response) {
-      console.log(response.data)
+    .then((response) => {
+      console.log(response)
+      // set the new state of puuid
+      setPuuid(response.data.puuid);
+      console.log("puuid", puuid)
+      // set the new state with summoners ID
+      setSummonerId(response.data.id);
+      console.log("summonerID", summonerId);
     }).catch(function(error){
       console.log(error)
     })
@@ -38,6 +46,10 @@ const Home = () => {
     <>
     <input type="text" placeholder="Enter Summoner Name" onChange={handleChange} value = {searchText}/>
     <button onClick={event => searchForSummoner(event)}>Summoner</button>
+    </>
+    <>
+    <div>
+    </div>
     </>
 </>
   );
