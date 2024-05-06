@@ -1,28 +1,30 @@
-import "./App.css";
-import Home from "./components/Home";
-import Nav from "./components/Nav";
-import Champions from "./components/Champions";
-import { Route, Routes } from "react-router-dom";
+import './App.css'
+import Home from './components/Home';
+import Nav from './components/Nav';
 
 function App() {
   return (
-    <>
-      <nav className="navContainer">
-        <h2 className="title">Summoner Search</h2>
+
+<div className='App'>
+<BrowserRouter>
+<nav className="navContainer">
+        <h2 className="title"><Link to="/">Summoner Search</Link></h2>
         <ul className="navList">
-          <li className="navItem">Home</li>
-          <li className="navItem">Champions</li>
-          <li className="navItem">Match History</li>
+          <li className="navItem"><Link to="/">Home</Link></li>
+          <li className="navItem"> <Link to="/champions">Champions</Link></li>
+          <li className="navItem" > <Link to="/matchHistory">Match History</Link></li>
           <li className="navItem">Contact Us</li>
-          {/* <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg></a></li> */}
         </ul>
-      </nav>
-      
+</nav>
+
+
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/champions" element={<Champions />} />
+      <Route exact path="/" element={<Home></Home>}/>
+      <Route path='/champions' element={<Champions></Champions>}/>
       </Routes>
-    </>
+      </BrowserRouter>
+      </div>
+
   );
 }
 
