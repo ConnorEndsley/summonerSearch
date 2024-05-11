@@ -1,105 +1,73 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Fragment } from "react";
 import logo from "../images/logo.jpg";
 import axios from "axios";
 
 const Home = () => {
-  const [searchText, setSearchText] = useState("");
-  const [puuid, setPuuid] = useState("");
-  const [summonerId, setSummonerId] = useState("");
-  const [playerData, setPlayerData] = useState({});
-  const [tagName, setTagName] = useState("");
-  const api_key = "RGAPI-79d88b4a-b61a-4669-849e-7645cd486c6c";
+  const [gameName, setGameName] = useState("");
+  const [tagLine, setTagLine] = useState("");
+  const [playerData, setPlayerData] = useState(null);
 
-  const handleChange = (event) => {
-    const value = event.target.value;
-    setSearchText(value);
+  const handleSubmit = (event) => {
     event.preventDefault();
-  };
-
-  const handleTagName = (event) => {
-    const value = event.target.value;
-    setTagName(value);
-    event.preventDefault();
-  };
-  // makes API call for users summonerID and data when event is made
-  // this function returns players data that can access profileIconId and summonerLevel
-  const searchForSummoner = (event) => {
-    const url = `https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${searchText}/${tagName}?api_key=${api_key}`;
-
-    // use axios to handle API call
-    return axios(url, {
-      method: "GET",
-      headers: {
-        "Access-Control-Allow-Credentials": true,
-        "Access-Control-Allow-Origin": "*, *",
-        "Access-Control-Allow-Headers":
-          "Origin, X-Requested-With, Content-Type, Accept, Authorization",
-        "Access-Control-Allow-Methods":
-          "GET, POST, DELETE, PUT",
-        "Content-Type": "application/json",
-      },
-    })
+    const url = `http://localhost:4000/api/summoner?gameName=${gameName}&tagLine=${tagLine}`;    axios
+      .get(url)
       .then((response) => {
-        console.log(response);
-        // set the new state of puuid
-        setPuuid(response.data.puuid);
-        console.log("puuid", puuid);
-        // set the new state with summoners ID
+        console.log(response.data);
         setPlayerData(response.data);
-        console.log("summonerID", playerData);
       })
       .catch(function (error) {
         console.log(error);
+        setPlayerData(null); // Reset playerData on error
       });
+  };
+
+  const handleGameName = (event) => {
+    setGameName(event.target.value);
+  };
+
+  const handleTagLine = (event) => {
+    setTagLine(event.target.value);
   };
 
   return (
     <>
       <div className="logoContainer">
-        <img src={logo} height="400px" width="700px" />
+        <img src={logo} height="400px" width="700px" alt="Logo" />
       </div>
 
       <h3>Search for any summoner for League of Legends</h3>
-      <>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Enter Summoner Name"
-          onChange={handleChange}
-          value={searchText}
+          onChange={handleGameName}
+          value={gameName}
         />
-        <br />
-
         <input
           type="text"
-          placeholder="Tag Name (example NA1)"
-          onChange={handleTagName}
-          value={tagName}
+          placeholder="Enter Tag Line"
+          onChange={handleTagLine}
+          value={tagLine}
         />
+        <button type="submit"> Summoner </button>
+      </form>
 
-        <br />
-
-        <button onClick={(event) => searchForSummoner(event)}>Summoner</button>
-      </>
-      <>
+      {playerData && (
         <div className="summonerInfo">
-          {JSON.stringify(playerData) !== "{}" ? (
-            <>
-              <p>Summoner Name: {searchText}</p>
-              <p>Summoner Level: {playerData.summonerLevel}</p>
-              <img
-                style={{ margin: "10px" }}
-                height="100"
-                width="100"
-                src={`https://ddragon.leagueoflegends.com/cdn/14.7.1/img/profileicon/${playerData.profileIconId}.png`}
-                alt=""
-              />
-            </>
-          ) : (
-            <p>Sorry, no player to show</p>
-          )}
+          <p>Summoner Name: {gameName}</p>
+          <p>Summoner Level: {playerData.summonerLevel}</p>
+          <img
+            style={{ margin: "10px" }}
+            height="100"
+            width="100"
+            src={`https://ddragon.leagueoflegends.com/cdn/14.9.1/img/profileicon/${playerData.profileIconId}.png`}
+            alt=""
+          />
         </div>
-      </>
+      )}
+
+      {!playerData && <p>Sorry, no player to show</p>}
     </>
   );
 };
