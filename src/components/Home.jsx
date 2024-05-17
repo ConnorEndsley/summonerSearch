@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Fragment } from "react";
 import logo from "../images/logo.jpg";
 import axios from "axios";
@@ -8,21 +8,26 @@ const Home = () => {
   const [tagLine, setTagLine] = useState("");
   const [playerData, setPlayerData] = useState(null);
   const [puuId, setPuuId] = useState("");
-  const [matchId, setMatchId] = useState([]);
+  const [matchList, setMatchList] = useState([]);
+
+  useEffect(() => {
+    if (puuId) {
+      handleFetchingGames(puuId);
+    }
+  }, [puuId]);
 
   // function to retrieve the users PUUID from Riot API when filling out the form with gameName and tagLine
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const url = `http://localhost:4000/api/summoner?gameName=${gameName}&tagLine=${tagLine}`;
-    axios
+    await axios
       .get(url)
       .then((response) => {
         console.log(response.data);
         setPlayerData(response.data);
-        setPuuId(response.data.puuid);
+        const newPuuId = response.data.puuid
+        setPuuId(newPuuId);
         console.log(puuId);
-        handleFetchingGames(puuId);
-
         // localStorage.setItem("PUUID", puuId)
       })
       .catch(function (error) {
@@ -48,7 +53,8 @@ const Home = () => {
     await axios
       .get(url)
       .then((response) => {
-        console.log(response.data);
+        const data = response.data
+        setMatchList(data)
       })
       .catch(function (error) {
         console.log(error);
