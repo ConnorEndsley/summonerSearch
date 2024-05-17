@@ -28,10 +28,12 @@
     display: flex;
     justify-content: center;
     margin: 10px;
-
     border-radius: 5px 5% 5px 5px;
-    
+}
 
+a{
+    text-decoration: none;
+    color: white;
 }
 
 .navItem:hover{

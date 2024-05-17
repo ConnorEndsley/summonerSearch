@@ -7,27 +7,52 @@ const Home = () => {
   const [gameName, setGameName] = useState("");
   const [tagLine, setTagLine] = useState("");
   const [playerData, setPlayerData] = useState(null);
+  const [puuId, setPuuId] = useState("");
+  const [matchId, setMatchId] = useState([]);
 
+  // function to retrieve the users PUUID from Riot API when filling out the form with gameName and tagLine
   const handleSubmit = (event) => {
     event.preventDefault();
-    const url = `http://localhost:4000/api/summoner?gameName=${gameName}&tagLine=${tagLine}`;    axios
+    const url = `http://localhost:4000/api/summoner?gameName=${gameName}&tagLine=${tagLine}`;
+    axios
       .get(url)
       .then((response) => {
         console.log(response.data);
         setPlayerData(response.data);
+        setPuuId(response.data.puuid);
+        console.log(puuId);
+        handleFetchingGames(puuId);
+
+        // localStorage.setItem("PUUID", puuId)
       })
       .catch(function (error) {
         console.log(error);
         setPlayerData(null); // Reset playerData on error
       });
-  };
 
+  };
+  // change state when the user types their gameName
   const handleGameName = (event) => {
     setGameName(event.target.value);
   };
 
+  // change state when the user types their tagLine
   const handleTagLine = (event) => {
     setTagLine(event.target.value);
+  };
+
+  // function that fetches the users last 10 games and returns the games' matchId in an array format
+  const handleFetchingGames = async (puuId) => {
+
+    const url = `http://localhost:4000/api/matches?puuId=${puuId}`;
+    await axios
+      .get(url)
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   return (

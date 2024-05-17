@@ -22,6 +22,19 @@ app.get('/api/summoner', async (req, res) => {
   }
 });
 
+app.get('/api/matches', async (req, res) => {
+  try{
+    const {puuId} = req.query;
+    const url = `https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuId}/ids?start=0&count=20&api_key=${riotApiKey}`
+    const response = await axios.get(url);
+    console.log(response)
+    res.json(response.data)
+  }catch(error){
+    console.error(error);
+    res.status(500).json({message: "Internal Server Error"})
+  }
+})
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
